@@ -1,0 +1,14 @@
+#!/bin/sh
+
+if [[ $EUID > 0 ]]; then
+  echo "Error: please run as root"
+  exit 1
+fi
+
+mount -o remount,rw /overlay/lower
+mount -o remount,rw /boot
+
+chroot /overlay/lower
+
+mount -o remount,ro /boot
+mount -o remount,ro /overlay/lower
