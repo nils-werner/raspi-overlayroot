@@ -4,17 +4,45 @@ Mounts an overlay filesystem over the root filesystem, so you can run without lo
 
 ## Installation
 
-Install this package and then add to the end of `/boot/config.txt`
+### Package
+
+Install this package
+
+```
+makepkg -si
+```
+
+then add to the end of `/boot/config.txt`
 
 ```
 initramfs initrd followkernel
 ```
 
-try rebooting, it should reboot as normal.
+try rebooting, it should boot as normal.
 
-Then try adding `overlayroot` to your `HOOKS` array in `/etc/mkinitcpio.conf` and reboot.
+### Enable overlayroot hook
 
-All changes you make to your filesystem should be non-persistent after this. You can now also set the entire root filesystem as readonly by adding changing `rw` to `ro` in `/boot/cmdline.txt`
+Then try adding `overlayroot` to your `HOOKS` array in `/etc/mkinitcpio.conf`, run
+
+```
+mkinitcpio -g /boot/initrd
+```
+
+and reboot. It should boot as normal.
+
+### Enable overlayroot in commandline
+
+Add `overlayroot`  to `/boot/cmdline.txt`
+
+```
+root=/dev/mmcblk0p2 rw rootwait console=ttyAMA0,115200 console=tty1 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 kgdboc=ttyAMA0,115200 elevator=noop overlayroot
+```
+
+and reboot. All changes you make to your filesystem should be non-persistent after this.
+
+### Set filesystems readonly
+
+You can now also set the entire root filesystem as readonly by adding changing `rw` to `ro` in `/boot/cmdline.txt`
 
 ```
 root=/dev/mmcblk0p2 ro rootwait console=ttyAMA0,115200 console=tty1 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 kgdboc=ttyAMA0,115200 elevator=noop
@@ -30,17 +58,19 @@ and adding `ro` to `/etc/fstab`
 /dev/mmcblk0p1  /boot   vfat    defaults,ro     0       0
 ```
 
-## Editing the root FS
+## Editing the root filesystem
 
-You can run `sudo rwrootfs` to enable writing to the root filesystem and change into an interactive shell in that filesystem. After exiting that shell, the filesystem is mounted as readonly again.
+You can run `sudo chroot /overlay/lower` to change into an interactive shell in your SD card file system.
 
-Be aware that all your dynamic system settings will not be set in the chroot. Most notably, name resolution will not work.
+If you have also set your file systems to read-only you can run `sudo rwrootfs` both mount them read-write and then `chroot` into the file system. After exiting that shell, the filesystem is mounted as readonly again.
 
-For full system-upgrades you need to change all filesystems to read-write and disable the initramfs.
+Be aware that all system settings that are set during boot time will not be set in the chroot. Most notably, DNS hostname resolution will not work.
+
+For full system-upgrades it is recommended you change the filesystems to read-write and remove `overlayroot` from `/boot/cmdline.txt`.
 
 ## Debugging
 
-Sometimes, overlayroot may cause trouble during boot time. To boot without it simply remove the line
+Sometimes, overlayroot may cause trouble during boot time. To boot without it simply remove `overlayroot` from `/boot/cmdline.txt` and
 
 ```
 initramfs initrd followkernel

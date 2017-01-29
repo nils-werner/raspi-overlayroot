@@ -1,28 +1,32 @@
 #!/usr/bin/ash
 
 run_hook() {
-  # Create overlay tree in RAM
-  mkdir -p /overlay
-  mount -t tmpfs overlayroot /overlay
-  mkdir -p /overlay/upper
-  mkdir -p /overlay/work
-  mkdir -p /overlay/lower
+  if [ "${overlayroot}" ]; then
+    # Create overlay tree in RAM
+    mkdir -p /overlay
+    mount -t tmpfs overlayroot /overlay
+    mkdir -p /overlay/upper
+    mkdir -p /overlay/work
+    mkdir -p /overlay/lower
 
-  # Remove /new_root directory and replace it with symlink
-  # After run_hook, mount_handler will mount our rootfs into here /new_root
-  rmdir /new_root
-  ln -s /overlay/lower /new_root
+    # Remove /new_root directory and replace it with symlink
+    # After run_hook, mount_handler will mount our rootfs into here /new_root
+    rmdir /new_root
+    ln -s /overlay/lower /new_root
+  fi;
 }
 
 run_latehook() {
-  # Remove /new_root symlink, rootfs is now mounted into /new_root, and replace it with empty directory
-  rm /new_root
-  mkdir -p /new_root
+  if [ "${overlayroot}" ]; then
+    # Remove /new_root symlink, rootfs is now mounted into /new_root, and replace it with empty directory
+    rm /new_root
+    mkdir -p /new_root
 
-  # Build overlay FS and mount it to /new_root
-  mount -t overlay overlay -o lowerdir=/overlay/lower,upperdir=/overlay/upper,workdir=/overlay/work /new_root
+    # Build overlay FS and mount it to /new_root
+    mount -t overlay overlay -o lowerdir=/overlay/lower,upperdir=/overlay/upper,workdir=/overlay/work /new_root
 
-  # Link overlay mount into new_root, so we can work on it while the machine is running
-  mkdir -p /new_root/overlay
-  mount -n -o rbind /overlay /new_root/overlay
+    # Link overlay mount into new_root, so we can work on it while the machine is running
+    mkdir -p /new_root/overlay
+    mount -n -o rbind /overlay /new_root/overlay
+  fi;
 }
