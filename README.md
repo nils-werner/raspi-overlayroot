@@ -2,6 +2,16 @@
 
 Mounts an overlay filesystem over the root filesystem, so you can run without losing data on powerloss or wearing out your SD cards.
 
+## Background
+
+Most common Linux installations require large parts of the root fileystem to be writable to run services reliably: Logging services create logfiles, other services create temporary config files, some services need a cache they can write to.
+
+However, SD cards like the ones used with Raspberry Pis don't like constantly being written to. They wear out and start to show errors after a few months or years of constantly being written to.
+
+So what one needs in this situation is a file system that can be read-only on the hardware side, but read-write on the operating system side.
+
+OverlayFS can do exactly that: by layering several file systems one can show data from one (the 'lower') filesystem, but have all changes to the data end up in a different (the 'upper') file system. If the lower filesystem is our SD card and the upper filesystem is a temporary filesystem in RAM, we have effectively separated our SD card from all write-attempts of the operating system. Without the operating system even noticing.
+
 ## Installation
 
 ### Package
