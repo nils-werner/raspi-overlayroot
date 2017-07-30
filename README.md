@@ -24,13 +24,7 @@ Install this package
 makepkg -si
 ```
 
-then enable the initramfs by adding
-
-```
-initramfs initrd followkernel
-```
-
-to the end of `/boot/config.txt`. Then try rebooting, it should boot as normal.
+Then try rebooting, it should boot as normal.
 
 ### Enable overlayroot hook
 
