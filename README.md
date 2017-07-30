@@ -80,10 +80,10 @@ For full system-upgrades it is recommended you change the filesystems to read-wr
 
 Sometimes, overlayroot may cause trouble during boot time. To boot without it simply remove `overlayroot` from `/boot/cmdline.txt`.
 
-If you still have problems, also remove the initramfs by removing
+If you still have problems, you can also try removing the initramfs by removing
 
 ```
-initramfs initrd followkernel
+initramfs initramfs-linux.img followkernel
 ```
 
 from `/boot/config.txt`.
