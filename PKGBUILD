@@ -1,5 +1,5 @@
 pkgname=overlayroot
-pkgver=0.1
+pkgver=0.2
 pkgrel=1
 pkgdesc="overlayFS root file system"
 arch=('any')
