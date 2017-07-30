@@ -1,5 +1,5 @@
 post_install() {
-  mkinitcpio -g /boot/initrd
+  mkinitcpio -p linux-raspberrypi
   echo " > Please add 'overlayroot' from your HOOKS array in /etc/mkinitcpio.conf."
 }
 
@@ -8,5 +8,5 @@ post_remove() {
 }
 
 post_upgrade() {
-  mkinitcpio -g /boot/initrd
+  mkinitcpio -p linux-raspberrypi
 }
