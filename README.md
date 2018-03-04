@@ -1,4 +1,4 @@
-# overlayroot for Raspberry Pi
+# overlayroot for ArchLinuxARM
 
 Mounts an overlay filesystem over the root filesystem, so you can run without losing data on powerloss or wearing out your SD cards.
 
