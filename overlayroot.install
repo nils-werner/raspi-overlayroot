@@ -6,7 +6,3 @@ post_install() {
 post_remove() {
   echo " > Please remove 'overlayroot' from your HOOKS array in /etc/mkinitcpio.conf."
 }
-
-post_upgrade() {
-  mkinitcpio -p linux-raspberrypi
-}
