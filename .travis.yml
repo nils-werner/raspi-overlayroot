@@ -8,7 +8,7 @@ arch:
     - base-devel
   script:
     - "yes | makepkg -si"
-    - "yes | pacman -R overlayroot"
+    - "yes | sudo pacman -R overlayroot"
 
 script:
   - "curl -s https://raw.githubusercontent.com/mikkeloscar/arch-travis/master/arch-travis.sh | bash"
