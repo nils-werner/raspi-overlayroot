@@ -7,8 +7,16 @@ fi
 
 mount -o remount,rw /overlay/lower
 mount -o remount,rw /boot
+mount --bind /boot /overlay/lower/boot
 
-chroot /overlay/lower
+if [ -e /usr/bin/arch-chroot ]
+then
+  arch-chroot /overlay/lower
+else
+  echo "Warning: The arch-chroot script is not available."
+  chroot /overlay/lower
+fi
 
-mount -o remount,ro /boot
-mount -o remount,ro /overlay/lower
+umount /overlay/lower/boot
+
+echo "The filesystems remain mounted read-write until next reboot."
