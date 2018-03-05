@@ -33,7 +33,7 @@ Then try rebooting, it should boot as normal.
 Then add `overlayroot` to your `HOOKS` array in `/etc/mkinitcpio.conf` and rebuild the initramfs by running
 
 ```
-mkinitcpio -p linux-raspberrypi
+mkinitcpio --allpresets
 ```
 
 and reboot. It should boot as normal.
