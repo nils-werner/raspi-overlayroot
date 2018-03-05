@@ -1,6 +1,6 @@
 post_install() {
   mkinitcpio -p linux-raspberrypi
-  echo " > Please add 'overlayroot' from your HOOKS array in /etc/mkinitcpio.conf."
+  echo " > Please add 'overlayroot' to your HOOKS array in /etc/mkinitcpio.conf."
 }
 
 post_remove() {

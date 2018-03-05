@@ -14,6 +14,8 @@ OverlayFS can do exactly that: by layering several file systems one can show dat
 
 If we even mounted the lower filesystem as readonly, it also becomes 100% tolerant to power-losses. You can simply pull the plug to power down your Raspberry Pi.
 
+Using this method I have been running several Raspberry Pi computers for 3+ years nonstop, after which the power supply gave way and had to be replaced. The SD-Card however is still working.
+
 ## Installation
 
 ### Package

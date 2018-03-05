@@ -5,6 +5,6 @@ cat << EOF
 None of the changes you make will be preseved after reboot.
 
 To disable overlayroot remove the 'overlayroot' argument
-from the kernel commandline
+from the kernel commandline.
 EOF
 fi
