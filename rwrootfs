@@ -2,15 +2,17 @@
 
 sudo -v
 
-if grep -qs '/overlay/lower' /proc/mounts; then
-    sudo mount -o remount,rw /overlay/lower
-fi
-if grep -qs '/overlay/lower/boot' /proc/mounts; then
-    sudo mount -o remount,rw /overlay/lower/boot
-fi
-if grep -qs '/boot' /proc/mounts; then
-    sudo mount -o remount,rw /boot
-fi
+mountpoints=(
+    '/overlay/lower'
+    '/overlay/lower/boot'
+    '/boot'
+)
+
+for m in "${mountpoints[@]}"; do
+    if mountpoint -q '$m'; then
+        sudo mount -o remount,rw '$m'
+    fi
+done
 
 sudo arch-chroot /overlay/lower
 
