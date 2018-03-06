@@ -1,14 +1,9 @@
 post_install() {
-  mkinitcpio --allpresets
-  echo " > Please add 'overlayroot' to your HOOKS array in /etc/mkinitcpio.conf."
+  echo " > Please add 'overlayroot' to your HOOKS array in /etc/mkinitcpio.conf and run mkinitcpio -P."
 }
 
 post_remove() {
   if grep overlayroot /etc/mkinitcpio.conf > /dev/null; then
-    echo " > Please remove 'overlayroot' from your HOOKS array in /etc/mkinitcpio.conf."
+    echo " > Please remove 'overlayroot' from your HOOKS array in /etc/mkinitcpio.conf and run mkinitcpio -P."
   fi
-}
-
-post_upgrade() {
-  mkinitcpio --allpresets
 }
