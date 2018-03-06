@@ -56,13 +56,14 @@ You can now also set the entire root filesystem as readonly by changing `rw` to 
 root=/dev/mmcblk0p2 ro rootwait console=ttyAMA0,115200 console=tty1 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 kgdboc=ttyAMA0,115200 elevator=noop overlayroot
 ```
 
-and changing the mountpoint `/boot` to `/overlay/lower/boot` and changing `defaults` to `defaults,ro` in `/etc/fstab`
+and duplicating the mountpoint `/boot` to `/overlay/lower/boot` and changing `defaults` to `defaults,ro` in `/etc/fstab`
 
 ```
 #
 # /etc/fstab: static file system information
 #
 # <file system>	<dir>	<type>	<options>	<dump>	<pass>
+/dev/mmcblk0p1  /boot   vfat    defaults,ro     0       0
 /dev/mmcblk0p1  /overlay/lower/boot   vfat    defaults,ro     0       0
 ```
 
