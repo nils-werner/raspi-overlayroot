@@ -3,7 +3,7 @@ post_install() {
 }
 
 post_remove() {
-  if grep overlayroot /etc/mkinitcpio.conf > /dev/null; then
+  if grep -qs 'overlayroot' /etc/mkinitcpio.conf; then
     echo " > Please remove 'overlayroot' from your HOOKS array in /etc/mkinitcpio.conf and run mkinitcpio -P."
   fi
 }
