@@ -2,6 +2,11 @@
 
 sudo -v
 
+if ! grep -qs 'overlayroot' /proc/cmdline; then
+    echo "Overlayroot not enabled. Aborting"
+    exit 1
+fi
+
 mountpoints=(
     '/overlay/lower'
     '/overlay/lower/boot'
@@ -9,8 +14,8 @@ mountpoints=(
 )
 
 for m in "${mountpoints[@]}"; do
-    if mountpoint -q '$m'; then
-        sudo mount -o remount,rw '$m'
+    if mountpoint -q "$m"; then
+        sudo mount -o remount,rw "$m"
     fi
 done
 
