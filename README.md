@@ -56,27 +56,21 @@ You can now also set the entire root filesystem as readonly by changing `rw` to 
 root=/dev/mmcblk0p2 ro rootwait console=ttyAMA0,115200 console=tty1 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 kgdboc=ttyAMA0,115200 elevator=noop overlayroot
 ```
 
-and adding `ro` to `/etc/fstab`
+and changing the mountpoint `/boot` to `/overlay/lower/boot` and changing `defaults` to `defaults,ro` in `/etc/fstab`
 
 ```
 #
 # /etc/fstab: static file system information
 #
 # <file system>	<dir>	<type>	<options>	<dump>	<pass>
-/dev/mmcblk0p1  /boot   vfat    defaults,ro     0       0
+/dev/mmcblk0p1  /overlay/lower/boot   vfat    defaults,ro     0       0
 ```
 
 ## Editing the root filesystem
 
-You can change `ro` back to `rw` and remove `overlayroot` from `/boot/cmdline.txt` to re-enable write access to your root FS.
+You can run `rwrootfs` to remount all file systems as read-write and change into an interactive shell in your SD card file system. After exiting that shell, the fileystems will remain read-write until next reboot.
 
-Alternatively you can run `sudo chroot /overlay/lower` to change into an interactive shell in your SD card file system.
-
-If you have also set your file systems to read-only you can run `sudo rwrootfs` both mount them read-write and then `chroot` into the file system. After exiting that shell, the filesystem is mounted as readonly again.
-
-Be aware that many runtime system settings that are set during boot time will not be set in the chroot. Most notably, you will find that DNS hostname resolution will not work.
-
-For full system-upgrades it is recommended you change the filesystems to read-write and remove `overlayroot` from `/boot/cmdline.txt`.
+Alternatively you can undo all changes from [Enable overlayroot in commandline](#enable-overlayroot-in-commandline) and [Set filesystems readonly](#set-filesystems-readonly) and reboot. This is the recommended way of system upgrades.
 
 ## Debugging
 

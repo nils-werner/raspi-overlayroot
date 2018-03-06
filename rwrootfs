@@ -1,14 +1,17 @@
 #!/bin/sh
 
-if [[ $EUID > 0 ]]; then
-  echo "Error: please run as root"
-  exit 1
+sudo -v
+
+if grep -qs '/overlay/lower' /proc/mounts; then
+    sudo mount -o remount,rw /overlay/lower
+fi
+if grep -qs '/overlay/lower/boot' /proc/mounts; then
+    sudo mount -o remount,rw /overlay/lower/boot
+fi
+if grep -qs '/boot' /proc/mounts; then
+    sudo mount -o remount,rw /boot
 fi
 
-mount -o remount,rw /overlay/lower
-mount -o remount,rw /boot
+sudo arch-chroot /overlay/lower
 
-chroot /overlay/lower
-
-mount -o remount,ro /boot
-mount -o remount,ro /overlay/lower
+echo "Leaving read-write fileystems. The filesystems remain mounted read-write until next reboot."
