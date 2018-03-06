@@ -1,4 +1,4 @@
-if grep overlayroot /proc/cmdline > /dev/null; then
+if grep -qs 'overlayroot' /proc/cmdline; then
 cat << EOF
 
 ==> WARNING: Overlayroot in effect.
