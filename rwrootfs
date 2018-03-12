@@ -7,17 +7,8 @@ if ! grep -qs 'overlayroot' /proc/cmdline; then
     exit 1
 fi
 
-mountpoints=(
-    '/overlay/lower'
-    '/overlay/lower/boot'
-    '/boot'
-)
-
-for m in "${mountpoints[@]}"; do
-    if mountpoint -q "$m"; then
-        sudo mount -o remount,rw "$m"
-    fi
-done
+sudo mount -o remount,rw "/overlay/lower"
+sudo mount $(findmnt -nro target -T /boot) "/overlay/lower/boot"
 
 sudo arch-chroot /overlay/lower
 
