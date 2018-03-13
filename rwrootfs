@@ -7,18 +7,12 @@ if ! grep -qs 'overlayroot' /proc/cmdline; then
     exit 1
 fi
 
-mountpoints=(
-    '/overlay/lower'
-    '/overlay/lower/boot'
-    '/boot'
-)
-
-for m in "${mountpoints[@]}"; do
-    if mountpoint -q "$m"; then
-        sudo mount -o remount,rw "$m"
-    fi
-done
+sudo mount -o remount,rw /overlay/lower
+sudo mount --bind /boot /overlay/lower/boot
+sudo mount -o remount,rw /overlay/lower/boot
 
 sudo arch-chroot /overlay/lower
+
+sudo umount /overlay/lower/boot
 
 echo "Leaving read-write fileystems. The filesystems remain mounted read-write until next reboot."
