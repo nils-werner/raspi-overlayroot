@@ -1,6 +1,10 @@
-# overlayroot for Raspberry Pi
+# overlayroot for ArchLinux ARM
+
+![Logo](artwork/overlayroot.png)
 
 Mounts an overlay filesystem over the root filesystem, so you can run without losing data on powerloss or wearing out your SD cards.
+
+[![Build Status](https://travis-ci.org/nils-werner/raspi-overlayroot.svg?branch=master)](https://travis-ci.org/nils-werner/raspi-overlayroot)
 
 ## Background
 
