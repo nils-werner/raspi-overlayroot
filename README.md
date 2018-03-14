@@ -1,6 +1,8 @@
 # overlayroot for ArchLinux ARM
 
-![Logo](artwork/overlayroot.png)
+<p align="center">
+<img src="artwork/overlayroot.png" width="360" />
+</p>
 
 Mounts an overlay filesystem over the root filesystem, so you can run without losing data on powerloss or wearing out your SD cards.
 
