@@ -2,9 +2,13 @@
 
 run_hook() {
   if [ "${overlayroot}" ]; then
-    # Create overlay tree in RAM
     mkdir -p /overlay
-    mount -t tmpfs overlayroot /overlay
+    if [ "${overlayroot}" = "tmpfs" ]; then
+      mount -t tmpfs overlayroot /overlay
+    else
+      mount ${overlayroot} /overlay
+      [ $? -eq 0 ] || mount -t tmpfs overlayroot /overlay
+    fi
     mkdir -p /overlay/upper
     mkdir -p /overlay/work
     mkdir -p /overlay/lower
@@ -21,6 +25,45 @@ run_latehook() {
     # Remove /new_root symlink, rootfs is now mounted into /new_root, and replace it with empty directory
     rm /new_root
     mkdir -p /new_root
+
+    if [ -e "/overlay/upper/overlayroot.resync" ]; then
+
+      echo "overlayroot: Resyncing lower and upper ..."
+
+      awk '$2 == "/overlay/lower" && $4 ~ /ro,/ { exit 1 }' /proc/mounts
+      is_ro=$?
+
+      if [ $is_ro -eq 1 ]; then
+        mount -o rw,remount /overlay/lower
+      fi
+
+      # Delete all files which have been whited out from upper
+      echo "overlayroot: Deleting all files from lower that have been wiped from upper ..."
+      (cd /overlay/upper && find . -type c -print) | while read path; do
+        [ "$(stat -c '%t %T' /overlay/upper/$path)" = "0 0" ] || continue
+	rm -fr /overlay/lower/$path /overlay/upper/$path
+      done
+
+      # Delete all files from lower that exist in upper
+      echo "overlayroot: Deleting all files from lower that exist in upper ..."
+      (cd /overlay/upper && find . ! -type d -print0) | (cd /overlay/lower && xargs -0 rm -fr)
+
+      # Copy upper to lower
+      echo "overlayroot: Copying all files from upper to lower ..."
+      (cd /overlay/upper && tar cf - .) | (cd /overlay/lower && tar xf -)
+
+      # Delete overlayroot.resync from lower
+      rm /overlay/lower/overlayroot.resync
+
+      # Delete all files from upper
+      echo "overlayroot: Deleting all files from upper ..."
+      rm -fr /overlay/upper/* /overlay/upper/.*
+
+      # Remount 'ro' after we are finished
+      if [ $is_ro -eq 1 ]; then
+        mount -o ro,remount /overlay/lower
+      fi
+    fi
 
     # Build overlay FS and mount it to /new_root
     mount -t overlay overlay -o lowerdir=/overlay/lower,upperdir=/overlay/upper,workdir=/overlay/work /new_root

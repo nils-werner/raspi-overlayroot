@@ -1,0 +1,4 @@
+. /etc/mkinitcpio.d/linux-raspberrypi.preset
+
+default_config="/etc/mkinitcpio-overlayroot.conf"
+default_image="/boot/initramfs-overlayroot.img"
