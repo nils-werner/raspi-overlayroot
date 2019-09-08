@@ -38,7 +38,7 @@ sha256sums=(
   # 'mkinitcpio-overlayroot.preset'
   '7ebdad6c610b8d35dab94343b7a98fb7dca4534aa43c49680b346919496fd1e8'
   # '90-overlayroot.hook'
-  '7ef79bcdbb7a4a340893ab40755a8f90c745d00396bee2f218cc8f78374aec19'
+  '939e8f4589ac008196386896a4ae221099186f22f27ee04de3e1e645f9e89a6d'
 )
 
 build() {
