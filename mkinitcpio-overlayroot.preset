@@ -1,4 +1,19 @@
-. /etc/mkinitcpio.d/linux-raspberrypi.preset
+_overlayroot_found=0
+for file in /etc/mkinitcpio.d/*.preset; do
+	if grep -q "^ALL_" $file; then
+		. $file
+		_overlayroot_found=1
+		break
+	fi
+done
+
+if [ $_overlayroot_found -eq 0 ]; then
+	echo "Failed to find base preset!" >&2
+	exit 1
+fi
+unset _overlayroot_found
+
+PRESETS=('default')
 
 default_config="/etc/mkinitcpio-overlayroot.conf"
 default_image="/boot/initramfs-overlayroot.img"

@@ -34,9 +34,9 @@ sha256sums=(
   # 'overlayroot-motd.sh'
   'e2e917ab85d44abfc8e4c504cd8925d6fec5d26c452198303e2238464552e9a1'
   # 'mkinitcpio-overlayroot.conf'
-  '0954c40ee94824707ed0d4bf65bda0be1b3e57c52dd8cd2d12df23bf597ae6a2'
+  '53688c23282caeecfb9a127dc8649535260fcd0e7d3372a2dffa06a765e1153a'
   # 'mkinitcpio-overlayroot.preset'
-  '7ebdad6c610b8d35dab94343b7a98fb7dca4534aa43c49680b346919496fd1e8'
+  '9c0293c1edb3f9662b09a5618361457934a82f04ed8aef11786ed54abe33dab7'
   # '90-overlayroot.hook'
   '0a81b378572ea6e2de20d9b52f2a1f6271a98aae31fe01f6c4a386df9ddf56aa'
 )
