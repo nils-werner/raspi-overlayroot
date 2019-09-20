@@ -24,7 +24,7 @@ sha256sums=(
   # 'initcpio-install-overlayroot'
   '3f197246d31439c84d7433609628126354c02bc496b72291cf884a21d1e1d492'
   # 'initcpio-hooks-overlayroot'
-  'ad262726508954ba51d821449cd03d2cb58ff181ea437fa0a229e3aeef675ee4'
+  'db79b7bb543a04e215436a7736861c9eb37f140b6c6d3e9cdc6383c3da7b2ba4'
   # 'rwrootfs'
   '75b8c2ebe9e08e58f207a82aa93cfdd0b46a2255e49493cf6fedfe97cc61bd98'
   # 'fsck.overlay'
