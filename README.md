@@ -4,7 +4,7 @@
 <img src="artwork/overlayroot.png" width="480" />
 </p>
 
-Mounts an overlay filesystem over the root filesystem, so you can run without losing data on powerloss or wearing out your SD cards.
+Mounts an overlay filesystem over the root filesystem, so you can run without losing data on powerloss or wearing out your SD cards. Similar to [fsprotect](https://packages.debian.org/unstable/admin/fsprotect) on Debian.
 
 [![Build Status](https://travis-ci.org/nils-werner/raspi-overlayroot.svg?branch=master)](https://travis-ci.org/nils-werner/raspi-overlayroot)
 
