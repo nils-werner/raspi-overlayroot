@@ -1,6 +1,6 @@
 pkgname=overlayroot
 pkgver=0.2
-pkgrel=1
+pkgrel=2
 pkgdesc="overlayFS root file system"
 arch=('any')
 url="https://github.com/nils-werner/arch-overlayroot"
@@ -9,24 +9,36 @@ depends=(
   'mkinitcpio'
   'arch-install-scripts'
 )
-install=overlayroot.install
 source=(
-  'overlayroot.install'
   'initcpio-install-overlayroot'
   'initcpio-hooks-overlayroot'
   'rwrootfs'
   'fsck.overlay'
   'journald-volatile-storage.conf'
   'overlayroot-motd.sh'
+  'mkinitcpio-overlayroot.conf'
+  'mkinitcpio-overlayroot.preset'
+  '90-overlayroot.hook'
 )
 sha256sums=(
-  'SKIP'
-  'SKIP'
-  'SKIP'
-  'SKIP'
-  'SKIP'
-  'SKIP'
-  'SKIP'
+  # 'initcpio-install-overlayroot'
+  '3f197246d31439c84d7433609628126354c02bc496b72291cf884a21d1e1d492'
+  # 'initcpio-hooks-overlayroot'
+  'db79b7bb543a04e215436a7736861c9eb37f140b6c6d3e9cdc6383c3da7b2ba4'
+  # 'rwrootfs'
+  '75b8c2ebe9e08e58f207a82aa93cfdd0b46a2255e49493cf6fedfe97cc61bd98'
+  # 'fsck.overlay'
+  'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+  # 'journald-volatile-storage.conf'
+  'c0c9a711f7554fdd02650409b098fc0636b8f3f574f03d927c6df84f5ec82a7f'
+  # 'overlayroot-motd.sh'
+  'e2e917ab85d44abfc8e4c504cd8925d6fec5d26c452198303e2238464552e9a1'
+  # 'mkinitcpio-overlayroot.conf'
+  '53688c23282caeecfb9a127dc8649535260fcd0e7d3372a2dffa06a765e1153a'
+  # 'mkinitcpio-overlayroot.preset'
+  '9c0293c1edb3f9662b09a5618361457934a82f04ed8aef11786ed54abe33dab7'
+  # '90-overlayroot.hook'
+  '0a81b378572ea6e2de20d9b52f2a1f6271a98aae31fe01f6c4a386df9ddf56aa'
 )
 
 build() {
@@ -36,8 +48,11 @@ build() {
 package() {
   install -Dm644 "$srcdir/initcpio-install-overlayroot" "$pkgdir/usr/lib/initcpio/install/overlayroot"
   install -Dm644 "$srcdir/initcpio-hooks-overlayroot" "$pkgdir/usr/lib/initcpio/hooks/overlayroot"
-  install -Dm644 "$srcdir/journald-volatile-storage.conf" "$pkgdir/etc/systemd/journald.conf.d/volatile-storage.conf"
+#  install -Dm644 "$srcdir/journald-volatile-storage.conf" "$pkgdir/etc/systemd/journald.conf.d/volatile-storage.conf"
   install -Dm755 "$srcdir/rwrootfs" "$pkgdir/usr/bin/rwrootfs"
   install -Dm755 "$srcdir/fsck.overlay" "$pkgdir/usr/bin/fsck.overlay"
+  install -Dm644 "$srcdir/mkinitcpio-overlayroot.conf" "$pkgdir/etc/mkinitcpio-overlayroot.conf"
+  install -Dm644 "$srcdir/mkinitcpio-overlayroot.preset" "$pkgdir/etc/mkinitcpio.d/overlayroot.preset"
   install -Dm644 "$srcdir/overlayroot-motd.sh" "$pkgdir/etc/profile.d/overlayroot-motd.sh"
+  install -Dm644 "$srcdir/90-overlayroot.hook" "$pkgdir/usr/share/libalpm/hooks/90-overlayroot.hook"
 }

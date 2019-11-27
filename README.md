@@ -32,34 +32,46 @@ Install this package
 makepkg -si
 ```
 
-Then try rebooting, it should boot as normal.
+After installation, a new `initramfs-overlayroot.img` initramfs will be automatically created but not used.
+Try rebooting, it should boot as normal.
 
 ### Enable overlayroot hook
 
-Then add `overlayroot` to your `HOOKS` array in `/etc/mkinitcpio.conf` and rebuild the initramfs by running
+To enable overlayroot hook, you need to change the `initramfs` command in `/boot/config.txt`:
 
 ```
-mkinitcpio -P
+initramfs initramfs-overlayroot.img followkernel
 ```
 
-and reboot. It should boot as normal.
+Try rebooting, it should boot as normal because there is no `overlayroot` on the commandline yet.
 
-### Enable overlayroot in commandline
+### Enable overlayroot backed on RAM (tmpfs)
 
-With the initramfs in place, you can now enable overlayroot by adding `overlayroot` to the end of `/boot/cmdline.txt`
+To boot with overlayroot over tmpfs, just add `overlayroot=tmpfs` to the end of `/boot/cmdline.txt`.
 
 ```
-root=/dev/mmcblk0p2 rw rootwait console=ttyAMA0,115200 console=tty1 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 kgdboc=ttyAMA0,115200 elevator=noop overlayroot
+root=/dev/mmcblk0p2 rw rootwait console=ttyAMA0,115200 console=tty1 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 kgdboc=ttyAMA0,115200 elevator=noop overlayroot=tmpfs
 ```
 
 and reboot. You should see a warning during login that any changes you make to your filesystem will be non-persistent after this point.
+
+### Enable overlayroot backed on USB
+
+To boot with overlayroot backed on USB, just add `overlayroot=<device>` to the end of `/boot/cmdline.txt`. You can specify the device to use by device name or tag, e.g. `/dev/sda2`, `LABEL=ROOT_USB`, `UUID=xxx`, refer to mount(8) manpage for details.
+
+```
+root=/dev/mmcblk0p2 rw rootwait console=ttyAMA0,115200 console=tty1 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 kgdboc=ttyAMA0,115200 elevator=noop overlayroot=LABEL=ROOT_USB
+```
+
+and reboot. You will not see a warning during login because any changes you make to your filesystem will be stored on the USB device.
+
 
 ### Set filesystems readonly
 
 You can now also set the entire root filesystem as readonly by changing `rw` to `ro` in `/boot/cmdline.txt`
 
 ```
-root=/dev/mmcblk0p2 ro rootwait console=ttyAMA0,115200 console=tty1 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 kgdboc=ttyAMA0,115200 elevator=noop overlayroot
+root=/dev/mmcblk0p2 ro rootwait console=ttyAMA0,115200 console=tty1 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 kgdboc=ttyAMA0,115200 elevator=noop overlayroot=tmpfs
 ```
 
 and adding `ro` to `/etc/fstab`
@@ -74,9 +86,13 @@ and adding `ro` to `/etc/fstab`
 
 ## Editing the root filesystem
 
-You can run `rwrootfs` to remount all file systems as read-write and change into an interactive shell in your SD card file system. After exiting that shell, the fileystems will remain read-write until next reboot.
+You can run `rwrootfs` to remount all file systems as read-write and change into an interactive shell in your SD card file system. After exiting that shell, the filesystems will remain read-write until next reboot.
 
 Alternatively you can undo all changes from [Enable overlayroot in commandline](#enable-overlayroot-in-commandline) and [Set filesystems readonly](#set-filesystems-readonly) and reboot. This is the recommended way of system upgrades.
+
+## Resyncing the SDCARD
+
+When using USB backend, you can resync automatically the SDCARD by creating a file named `/overlayroot.resync`. Upon reboot, files (virtually) removed from the SDCARD will be removed from the SDCARD for real and the content of the USB backend will be moved to the SDCARD.
 
 ## Debugging
 
@@ -85,7 +101,7 @@ Sometimes, overlayroot may cause trouble during boot time. To boot without it si
 If you still have problems, you can also try removing the initramfs by removing
 
 ```
-initramfs initramfs-linux.img followkernel
+initramfs initramfs-overlayroot.img followkernel
 ```
 
 from `/boot/config.txt`.
