@@ -1,0 +1,27 @@
+pkgbase = overlayroot
+	pkgdesc = overlayFS root file system
+	pkgver = 0.2
+	pkgrel = 2
+	url = https://github.com/nils-werner/arch-overlayroot
+	install = overlayroot.install
+	arch = any
+	license = MIT
+	depends = mkinitcpio
+	depends = arch-install-scripts
+	source = overlayroot.install
+	source = initcpio-install-overlayroot
+	source = initcpio-hooks-overlayroot
+	source = rwrootfs
+	source = fsck.overlay
+	source = journald-volatile-storage.conf
+	source = overlayroot-motd.sh
+	sha256sums = SKIP
+	sha256sums = SKIP
+	sha256sums = SKIP
+	sha256sums = SKIP
+	sha256sums = SKIP
+	sha256sums = SKIP
+	sha256sums = SKIP
+
+pkgname = overlayroot
+
