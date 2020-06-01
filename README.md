@@ -36,7 +36,12 @@ Then try rebooting, it should boot as normal.
 
 ### Enable overlayroot hook
 
-Then add `overlayroot` to your `HOOKS` array in `/etc/mkinitcpio.conf` and rebuild the initramfs by running
+Then in `/etc/mkinitcpio.conf`
+
+ 1. add `overlay` to your `MODULES` array
+ 1. add `overlayroot` to your `HOOKS` array
+
+and rebuild the initramfs by running
 
 ```
 mkinitcpio -P
@@ -46,7 +51,9 @@ and reboot. It should boot as normal.
 
 ### Enable overlayroot in commandline
 
-With the initramfs in place, you can now enable overlayroot by adding `overlayroot` to the end of `/boot/cmdline.txt`
+With the initramfs in place, you can now enable overlayroot by [adding `overlayroot` to the end of the Kernel commandline](https://wiki.archlinux.org/index.php/Kernel_parameters)
+
+I.e. for Raspberry Pi, edit `/boot/cmdline.txt`
 
 ```
 root=/dev/mmcblk0p2 rw rootwait console=ttyAMA0,115200 console=tty1 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 kgdboc=ttyAMA0,115200 elevator=noop overlayroot
@@ -56,7 +63,9 @@ and reboot. You should see a warning during login that any changes you make to y
 
 ### Set filesystems readonly
 
-You can now also set the entire root filesystem as readonly by changing `rw` to `ro` in `/boot/cmdline.txt`
+You can now also set the entire root filesystem as readonly by [changing `rw` to `ro` in the Kernel commandline](https://wiki.archlinux.org/index.php/Kernel_parameters)
+
+I.e. for Raspberry Pi
 
 ```
 root=/dev/mmcblk0p2 ro rootwait console=ttyAMA0,115200 console=tty1 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 kgdboc=ttyAMA0,115200 elevator=noop overlayroot
