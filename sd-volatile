@@ -1,0 +1,15 @@
+#!/bin/bash
+
+build() {
+    add_module "overlay"
+
+    add_systemd_unit "systemd-volatile-root.service"
+}
+
+help() {
+    cat <<HELPEOF
+This hook installs the necessary infrastructure for systemd.volatile to work.
+HELPEOF
+}
+
+# vim: set ft=sh ts=4 sw=4 et:

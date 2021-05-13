@@ -34,12 +34,13 @@ makepkg -si
 
 Then try rebooting, it should boot as normal.
 
-### Enable overlayroot hook
+### Enable sd-volatile hook
 
 Then in `/etc/mkinitcpio.conf`
 
- 1. add `overlay` to your `MODULES` array
- 1. add `overlayroot` to your `HOOKS` array
+ 1. remove `udev` from your `HOOKS` array
+ 1. add `systemd` to your `HOOKS` array
+ 1. add `sd-volatile` to your `HOOKS` array
 
 and rebuild the initramfs by running
 
@@ -51,12 +52,12 @@ and reboot. It should boot as normal.
 
 ### Enable overlayroot in commandline
 
-With the initramfs in place, you can now enable overlayroot by [adding `overlayroot` to the end of the Kernel commandline](https://wiki.archlinux.org/index.php/Kernel_parameters)
+With the initramfs in place, you can now enable overlayroot by [adding `systemd.volatile=overlay` to the end of the Kernel commandline](https://wiki.archlinux.org/index.php/Kernel_parameters)
 
 I.e. for Raspberry Pi, edit `/boot/cmdline.txt`
 
 ```
-root=/dev/mmcblk0p2 rw rootwait console=ttyAMA0,115200 console=tty1 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 kgdboc=ttyAMA0,115200 elevator=noop overlayroot
+root=/dev/mmcblk0p2 rw rootwait console=ttyAMA0,115200 console=tty1 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 kgdboc=ttyAMA0,115200 elevator=noop systemd.volatile=overlay
 ```
 
 and reboot. You should see a warning during login that any changes you make to your filesystem will be non-persistent after this point.
@@ -68,7 +69,7 @@ You can now also set the entire root filesystem as readonly by [changing `rw` to
 I.e. for Raspberry Pi
 
 ```
-root=/dev/mmcblk0p2 ro rootwait console=ttyAMA0,115200 console=tty1 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 kgdboc=ttyAMA0,115200 elevator=noop overlayroot
+root=/dev/mmcblk0p2 ro rootwait console=ttyAMA0,115200 console=tty1 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 kgdboc=ttyAMA0,115200 elevator=noop systemd.volatile=overlay
 ```
 
 and adding `ro` to `/etc/fstab`
@@ -83,13 +84,12 @@ and adding `ro` to `/etc/fstab`
 
 ## Editing the root filesystem
 
-You can run `rwrootfs` to remount all file systems as read-write and change into an interactive shell in your SD card file system. After exiting that shell, the fileystems will remain read-write until next reboot.
-
-Alternatively you can undo all changes from [Enable overlayroot in commandline](#enable-overlayroot-in-commandline) and [Set filesystems readonly](#set-filesystems-readonly) and reboot. This is the recommended way of system upgrades.
+Remove `systemd.volatile=overlay` from `/boot/cmdline.txt`
 
 ## Debugging
 
-Sometimes, overlayroot may cause trouble during boot time. To boot without it simply remove `overlayroot` from `/boot/cmdline.txt`.
+Sometimes, overlayroot may cause trouble during boot time. To boot without it simply set `systemd.volatile=0
+` in `/boot/cmdline.txt`.
 
 If you still have problems, you can also try removing the initramfs by removing
 

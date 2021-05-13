@@ -1,4 +1,4 @@
-if grep -qs 'overlayroot' /proc/cmdline; then
+if grep -qs 'systemd.volatile' /proc/cmdline; then
 cat << EOF
 
 ==> WARNING: Overlayroot in effect.
