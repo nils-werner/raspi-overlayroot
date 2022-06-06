@@ -57,7 +57,7 @@ run_latehook() {
 
       # Copy upper to lower
       echo "overlayroot: Copying all files from upper to lower ..."
-      (cd /overlay/upper && tar cf - .) | (cd /overlay/lower && tar xf -)
+      (cd /overlay/upper && tar cf - --exclude="*/log/*" .) | (cd /overlay/lower && tar xf -)
 
       # Delete overlayroot.resync from lower
       rm /overlay/lower/overlayroot.resync
